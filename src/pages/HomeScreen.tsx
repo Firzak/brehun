@@ -48,13 +48,13 @@ export function HomeScreen() {
   const isStartEnabled = playerNames.every((n) => n.trim().length > 0)
 
   return (
-    <div className="min-h-screen h-dvh bg-ink flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen h-dvh bg-ink flex flex-col items-center py-6 sm:py-10 px-4 relative overflow-y-auto">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-gold blur-3xl" />
         <div className="absolute bottom-20 right-20 w-48 h-48 rounded-full bg-ember blur-3xl" />
       </div>
 
-      <div className="relative z-10 w-full max-w-lg space-y-6 sm:space-y-8">
+      <div className="relative z-10 w-full max-w-lg space-y-5 sm:space-y-6">
         <div className="text-center space-y-3">
           <div className="flex justify-center gap-2 sm:gap-3">
             {FIGURES.map((f) => (
