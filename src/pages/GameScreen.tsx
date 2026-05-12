@@ -9,9 +9,11 @@ import { AccusationResult } from '../components/AccusationResult'
 import { RoundEnd } from '../components/RoundEnd'
 import { VictoryScreen } from '../components/VictoryScreen'
 import { getFigureInfo } from '../game/constants'
+import { useTranslation } from '../hooks/useTranslation'
 
 export function GameScreen() {
   const { gameState, playCards } = useGameStore()
+  const { t } = useTranslation()
   const [selectedCards, setSelectedCards] = useState<string[]>([])
 
   const currentPlayer = gameState?.players[gameState.currentPlayerIndex]
@@ -59,11 +61,9 @@ export function GameScreen() {
           <div className="flex-1 flex flex-col min-h-0">
             <div className="flex-1 flex flex-col items-center justify-center px-2 py-4 gap-3">
               <div className="text-center">
-                <p className="text-gold/50 text-xs">
-                  Choisis les cartes à poser
-                </p>
+                <p className="text-gold/50 text-xs">{t('play.choose_cards')}</p>
                 <p className="text-gold/70 text-xs">
-                  Annonce : <span className="text-gold font-semibold">{targetFigureInfo?.name}</span>
+                  {t('play.announce')} <span className="text-gold font-semibold">{targetFigureInfo?.name}</span>
                 </p>
               </div>
 
@@ -86,7 +86,7 @@ export function GameScreen() {
                   onClick={() => setSelectedCards(currentPlayer!.hand.map((c) => c.id))}
                   className="flex-1 px-4 py-3 rounded-lg border border-gold-dark/20 text-gold/60 text-sm font-bold hover:bg-parchment/10 transition-colors active:scale-95"
                 >
-                  Tous
+                  {t('play.all')}
                 </button>
                 <button
                   type="button"
@@ -100,10 +100,7 @@ export function GameScreen() {
                     }
                   `}
                 >
-                  {selectedCards.length > 0
-                    ? `Poser (${selectedCards.length})`
-                    : 'Poser'
-                  }
+                  {selectedCards.length > 0 ? `${t('play.play')} (${selectedCards.length})` : t('play.play')}
                 </button>
               </div>
             </div>
@@ -113,7 +110,7 @@ export function GameScreen() {
         {isPlaying && !isCurrentPlayerAlive && (
           <div className="flex-1 flex items-center justify-center p-8">
             <p className="text-gold/30 text-sm text-center">
-              Tu as été éliminé.<br />Attends la fin de la partie.
+              {t('eliminated.wait')}<br />{t('eliminated.wait_end')}
             </p>
           </div>
         )}

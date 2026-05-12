@@ -2,9 +2,11 @@ import { useGameStore } from '../store/gameStore'
 import { FigureIllustration } from './FigureIllustrations'
 import { getFigureInfo, FIGURES } from '../game/constants'
 import type { FigureId } from '../game/types'
+import { useTranslation } from '../hooks/useTranslation'
 
 export function RoundEnd() {
   const { gameState, startNewRound } = useGameStore()
+  const { t } = useTranslation()
 
   if (!gameState?.roundWinnerId) return null
 
@@ -22,16 +24,16 @@ export function RoundEnd() {
             <span className="text-gold text-2xl sm:text-3xl">👑</span>
           </div>
 
-          <h2 className="text-gold text-lg sm:text-2xl font-bold">Manche {gameState.round}</h2>
+          <h2 className="text-gold text-lg sm:text-2xl font-bold">{t('round.end_title')} {gameState.round}</h2>
         </div>
 
         <div className="space-y-1">
-          <p className="text-gold/50 text-xs">Vainqueur</p>
+          <p className="text-gold/50 text-xs">{t('round.winner')}</p>
           <p className="text-gold text-lg sm:text-xl font-bold">{winner.name}</p>
         </div>
 
         <div className="space-y-1.5">
-          <p className="text-gold/50 text-[10px] uppercase tracking-wider">Prochaine cible</p>
+          <p className="text-gold/50 text-[10px] uppercase tracking-wider">{t('round.next_target')}</p>
           <div className="flex items-center justify-center gap-2">
             <FigureIllustration figure={nextTargetFigure.id} size={22} />
             <span className="text-gold font-bold text-sm sm:text-base" style={{ color: nextTargetFigure.lightColor }}>
@@ -54,7 +56,7 @@ export function RoundEnd() {
           onClick={startNewRound}
           className="w-full py-4 sm:py-5 rounded-lg border border-gold/40 bg-gradient-to-r from-gold/20 to-ember/20 text-gold font-bold text-sm sm:text-lg hover:from-gold/30 hover:to-ember/30 transition-all duration-200 active:scale-95 animate-pulse-glow"
         >
-          Nouvelle Manche
+          {t('round.new_round')}
         </button>
       </div>
     </div>

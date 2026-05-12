@@ -5,12 +5,15 @@ export interface Card {
   figure: FigureId
 }
 
+export type Lang = 'fr' | 'uk'
+
 export interface Player {
   id: string
   name: string
   lives: number
   hand: Card[]
   isAlive: boolean
+  language: Lang
 }
 
 export interface PlayedCards {

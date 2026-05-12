@@ -1,6 +1,7 @@
 import type { GameState } from '../game/types'
 import { getFigureInfo } from '../game/constants'
 import { FigureIllustration } from './FigureIllustrations'
+import { useTranslation } from '../hooks/useTranslation'
 
 interface Props {
   gameState: GameState
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function Hud({ gameState, currentPlayerId }: Props) {
+  const { t } = useTranslation()
   const targetFigure = getFigureInfo(gameState.targetFigure)
 
   return (
@@ -15,7 +17,7 @@ export function Hud({ gameState, currentPlayerId }: Props) {
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-3">
           <span className="text-gold/50 text-[10px] sm:text-xs uppercase whitespace-nowrap">
-            R{gameState.round}
+            {t('hud.r')}{gameState.round}
           </span>
           <div className="flex items-center gap-1.5">
             <FigureIllustration figure={targetFigure.id} size={18} />

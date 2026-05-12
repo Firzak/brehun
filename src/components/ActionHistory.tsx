@@ -1,8 +1,10 @@
 import { useGameStore } from '../store/gameStore'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from '../hooks/useTranslation'
 
 export function ActionHistory() {
   const { gameState } = useGameStore()
+  const { t } = useTranslation()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -22,7 +24,7 @@ export function ActionHistory() {
         className="max-h-20 sm:max-h-28 overflow-y-auto space-y-0.5 scrollbar-thin"
       >
         {actions.length === 0 && (
-          <p className="text-gold/30 text-[10px] italic">Aucune action</p>
+          <p className="text-gold/30 text-[10px] italic">{t('history.empty')}</p>
         )}
         {actions.map((action, idx) => {
           const isSystem = action.playerId === 'system'

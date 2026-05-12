@@ -1,9 +1,11 @@
 import { useGameStore } from '../store/gameStore'
 import { getFigureInfo } from '../game/constants'
 import { FigureIllustration } from './FigureIllustrations'
+import { useTranslation } from '../hooks/useTranslation'
 
 export function AccusationResult() {
   const { gameState, resolveAccusation } = useGameStore()
+  const { t } = useTranslation()
 
   if (!gameState?.accusationResult) return null
 
@@ -22,18 +24,18 @@ export function AccusationResult() {
       <div className="relative bg-gradient-to-b from-wood to-ink border border-gold-dark/30 rounded-xl p-5 sm:p-8 w-full max-w-sm mx-auto shadow-2xl space-y-5 sm:space-y-6">
         <div className="text-center space-y-1.5">
           <h2 className={`text-lg sm:text-xl font-bold ${wasLie ? 'text-blood' : 'text-ember'}`}>
-            {wasLie ? 'MENTEUR !' : 'C\'ÉTAIT LA VÉRITÉ !'}
+            {wasLie ? t('result.liar_title') : t('result.truth_title')}
           </h2>
           <p className="text-gold/70 text-xs sm:text-sm">
             {wasLie
-              ? `${loser.name} a menti et perd 1 vie`
-              : `${accuser.name} a accusé à tort et perd 1 vie`
+              ? t('result.liar_lost', { name: loser.name })
+              : t('result.accuser_lost', { name: accuser.name })
             }
           </p>
         </div>
 
         <div className="flex items-center justify-center gap-2">
-          <span className="text-gold/50 text-[10px] uppercase tracking-wider">{targetFigureInfo.name}</span>
+          <span className="text-gold/50 text-[10px] uppercase tracking-wider">{t('result.target_figure')} : {targetFigureInfo.name}</span>
           <FigureIllustration figure={gameState.targetFigure} size={20} />
         </div>
 
@@ -72,11 +74,11 @@ export function AccusationResult() {
             <span className={`font-bold ${wasLie ? 'text-blood' : 'text-ember'}`}>
               {loser.name}
             </span>
-            <span className="text-gold/60">perd 1 vie</span>
+            <span className="text-gold/60">{t('result.lost_life')}</span>
             <span className="text-gold/40">({loser.lives} ♥)</span>
           </div>
           {isLoserEliminated && (
-            <p className="text-blood font-bold text-base sm:text-lg animate-pulse">ÉLIMINÉ !</p>
+            <p className="text-blood font-bold text-base sm:text-lg animate-pulse">{t('result.eliminated')}</p>
           )}
         </div>
 
@@ -85,7 +87,7 @@ export function AccusationResult() {
           onClick={resolveAccusation}
           className="w-full py-3.5 sm:py-3 rounded-lg border border-gold/30 bg-gold/10 text-gold font-bold text-sm hover:bg-gold/20 transition-all duration-200 active:scale-95"
         >
-          Continuer
+          {t('result.continue')}
         </button>
       </div>
     </div>

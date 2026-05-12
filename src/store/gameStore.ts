@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { GameState } from '../game/types'
+import type { GameState, Lang } from '../game/types'
 import {
   createInitialState,
   playCards as enginePlayCards,
@@ -20,7 +20,7 @@ interface GameStore {
   gameState: GameState | null
 
   setAppScreen: (screen: AppScreen) => void
-  startGame: (playerNames: string[]) => void
+  startGame: (playerNames: string[], playerLangs: Lang[]) => void
   playCards: (cardIds: string[]) => void
   accuse: () => void
   believe: () => void
@@ -37,8 +37,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setAppScreen: (screen) => set({ appScreen: screen }),
 
-  startGame: (playerNames) => {
-    const state = createInitialState(playerNames)
+  startGame: (playerNames, playerLangs) => {
+    const state = createInitialState(playerNames, playerLangs)
     saveGameState(state)
     set({ appScreen: { type: 'game' }, gameState: state })
   },

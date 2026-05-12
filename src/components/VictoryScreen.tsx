@@ -1,8 +1,10 @@
 import { useGameStore } from '../store/gameStore'
 import { getFigureInfo } from '../game/constants'
+import { useTranslation } from '../hooks/useTranslation'
 
 export function VictoryScreen() {
   const { gameState, resetGame } = useGameStore()
+  const { t } = useTranslation()
 
   if (!gameState?.gameWinnerId) return null
 
@@ -27,16 +29,18 @@ export function VictoryScreen() {
             <span className="text-3xl sm:text-5xl">🏆</span>
           </div>
 
-          <h1 className="text-gold text-2xl sm:text-3xl font-bold">Victoire !</h1>
+          <h1 className="text-gold text-2xl sm:text-3xl font-bold">{t('victory.title')}</h1>
+          <p className="text-gold/50 text-xs">{t('victory.game_over')}</p>
         </div>
 
         <div>
-          <p className="text-gold/50 text-[10px] uppercase tracking-wider mb-1">Grand Vainqueur</p>
+          <p className="text-gold/50 text-[10px] uppercase tracking-wider mb-1">{t('victory.grand_winner')}</p>
           <p className="text-gold text-xl sm:text-2xl font-bold">{winner.name}</p>
+          <p className="text-gold/40 text-[10px] mt-1">{t('victory.last_target')} : {targetFigure.name}</p>
         </div>
 
         <div className="space-y-1">
-          <p className="text-gold/50 text-[10px] uppercase tracking-wider">Classement</p>
+          <p className="text-gold/50 text-[10px] uppercase tracking-wider">{t('victory.ranking')}</p>
           {sortedPlayers.map((p, idx) => (
             <div
               key={p.id}
@@ -65,7 +69,7 @@ export function VictoryScreen() {
           onClick={resetGame}
           className="w-full py-4 sm:py-5 rounded-lg border border-gold/40 bg-gradient-to-r from-gold/20 to-ember/20 text-gold font-bold text-sm sm:text-lg hover:from-gold/30 hover:to-ember/30 transition-all duration-200 active:scale-95 animate-pulse-glow"
         >
-          Rejouer
+          {t('victory.replay')}
         </button>
       </div>
     </div>

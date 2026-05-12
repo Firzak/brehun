@@ -1,4 +1,4 @@
-import type { Card, Player, GameState, PlayedCards, ActionLog, FigureId, GamePhase } from './types'
+import type { Card, Player, GameState, PlayedCards, ActionLog, FigureId, GamePhase, Lang } from './types'
 import { FIGURES, INITIAL_LIVES, CARDS_PER_FIGURE } from './constants'
 
 let nextPlayerId = 0
@@ -47,7 +47,7 @@ export function pickRandomFigure(): FigureId {
   return FIGURES[Math.floor(Math.random() * FIGURES.length)].id
 }
 
-export function createInitialState(playerNames: string[]): GameState {
+export function createInitialState(playerNames: string[], playerLangs: Lang[]): GameState {
   resetIds()
 
   const deck = shuffleDeck(createDeck())
@@ -59,6 +59,7 @@ export function createInitialState(playerNames: string[]): GameState {
     lives: INITIAL_LIVES,
     hand: hands[i],
     isAlive: true,
+    language: playerLangs[i] ?? 'fr',
   }))
 
   const targetFigure = pickRandomFigure()

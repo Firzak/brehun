@@ -1,9 +1,11 @@
 import { useGameStore } from '../store/gameStore'
 import { FigureIllustration } from './FigureIllustrations'
 import { getFigureInfo } from '../game/constants'
+import { useTranslation } from '../hooks/useTranslation'
 
 export function PlayerTransition() {
   const { gameState, transitionToPlaying } = useGameStore()
+  const { t } = useTranslation()
 
   if (!gameState) return null
 
@@ -24,23 +26,26 @@ export function PlayerTransition() {
             <span className="text-gold text-2xl sm:text-4xl">🃏</span>
           </div>
 
-          <h2 className="text-gold text-lg sm:text-2xl font-bold leading-tight">
-            {hasPendingPlay
-              ? `${currentPlayer.name}, à toi de juger !`
-              : `${currentPlayer.name}, c'est ton tour !`
-            }
+          <h2 className="text-gold text-2xl sm:text-3xl font-bold leading-tight">
+            {currentPlayer.name}
           </h2>
+
+          <p className="text-gold/80 text-base sm:text-lg">
+            {hasPendingPlay ? t('transition.your_judgment') : t('transition.your_turn')}
+          </p>
 
           {hasPendingPlay && prevPlayPlayer && (
             <p className="text-gold/70 text-xs sm:text-sm">
-              <span className="text-ember font-semibold">{prevPlayPlayer.name}</span> a posé{' '}
-              <span className="text-gold font-semibold">{gameState.lastPlay!.cardCount}</span> carte(s)
+              <span className="text-ember font-semibold">{prevPlayPlayer.name}</span>{' '}
+              {t('transition.played_cards')}{' '}
+              <span className="text-gold font-semibold">{gameState.lastPlay!.cardCount}</span>{' '}
+              {t('transition.card_s')}
             </p>
           )}
         </div>
 
         <div className="space-y-1.5">
-          <p className="text-gold/50 text-[10px] sm:text-xs uppercase tracking-wider">Figure cible</p>
+          <p className="text-gold/50 text-[10px] sm:text-xs uppercase tracking-wider">{t('transition.target_figure')}</p>
           <div className="flex items-center justify-center gap-2">
             <FigureIllustration figure={targetInfo.id} size={24} />
             <span className="text-gold font-bold text-base sm:text-lg" style={{ color: targetInfo.lightColor }}>
@@ -51,9 +56,9 @@ export function PlayerTransition() {
 
         <div className="space-y-3">
           <p className="text-gold/60 text-xs sm:text-sm italic leading-relaxed">
-            {hasPendingPlay
-              ? `Tu dois décider si ${prevPlayPlayer?.name} dit la vérité ou ment.`
-              : `Passe l'appareil à ${currentPlayer.name} puis appuie sur Prêt.`
+            {hasPendingPlay && prevPlayPlayer
+              ? `${t('transition.decide')} ${prevPlayPlayer.name} ${t('transition.decide_truth')}`
+              : `${t('transition.pass_device')}`
             }
           </p>
 
@@ -62,12 +67,12 @@ export function PlayerTransition() {
             onClick={transitionToPlaying}
             className="w-full py-4 sm:py-5 rounded-lg border border-gold/40 bg-gradient-to-r from-gold/20 to-ember/20 text-gold font-bold text-base sm:text-lg hover:from-gold/30 hover:to-ember/30 transition-all duration-200 active:scale-95 animate-pulse-glow"
           >
-            Prêt
+            {t('transition.ready')}
           </button>
         </div>
 
         <p className="text-gold/30 text-[10px] sm:text-xs">
-          Passe l'appareil au joueur suivant avant d'appuyer sur Prêt
+          {t('transition.pass_device')}
         </p>
       </div>
     </div>
