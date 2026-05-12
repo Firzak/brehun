@@ -138,23 +138,10 @@ export function playCards(state: GameState, cardIds: string[]): GameState {
     cardCount: playedCardsData.length,
   }
 
-  const hasWonRound = remainingHand.length === 0
-
   const newActions = [
     ...state.actions,
     addAction(state, 'play', player.id, `${player.name} a posé ${playedCardsData.length} carte(s) face cachée`),
   ]
-
-  if (hasWonRound) {
-    newActions.push(addAction(state, 'round-win', player.id, `${player.name} a vidé sa main et remporte la manche !`))
-  }
-
-  let nextPhase: GamePhase
-  if (hasWonRound) {
-    nextPhase = 'round-end'
-  } else {
-    nextPhase = 'player-transition'
-  }
 
   const nextIndex = getNextAliveIndex(updatedPlayers, state.currentPlayerIndex)
 
@@ -162,10 +149,10 @@ export function playCards(state: GameState, cardIds: string[]): GameState {
     ...state,
     players: updatedPlayers,
     lastPlay: playedCards,
-    phase: nextPhase,
+    phase: 'player-transition',
     currentPlayerIndex: nextIndex,
     actions: newActions,
-    roundWinnerId: hasWonRound ? player.id : null,
+    roundWinnerId: null,
     accusationResult: null,
   }
 }
@@ -238,6 +225,7 @@ export function accuse(state: GameState): GameState {
       phase: 'accusation-result',
       accusationResult: {
         accuserId: accuser.id,
+        playedById: prevPlayer.id,
         wasLie: isLie,
         loserId,
         revealedCards: [...state.lastPlay.cards],
@@ -255,6 +243,7 @@ export function accuse(state: GameState): GameState {
     phase: nextPhase,
     accusationResult: {
       accuserId: accuser.id,
+      playedById: prevPlayer.id,
       wasLie: isLie,
       loserId,
       revealedCards: [...state.lastPlay.cards],
@@ -267,7 +256,7 @@ export function accuse(state: GameState): GameState {
 }
 
 export function resolveAccusation(state: GameState): GameState {
-  const { players, currentPlayerIndex, aliveCount, roundWinnerId } = state
+  const { players, currentPlayerIndex, aliveCount } = state
 
   if (aliveCount <= 1) {
     const winner = getAlivePlayers(players)[0]
@@ -275,30 +264,53 @@ export function resolveAccusation(state: GameState): GameState {
       ...state,
       phase: 'game-over',
       gameWinnerId: winner?.id ?? null,
+      accusationResult: null,
     }
+  }
+
+  const playedBy = state.accusationResult
+    ? players.find((p) => p.id === state.accusationResult!.playedById)
+    : null
+
+  const hasEmptyHand = playedBy ? playedBy.hand.length === 0 && playedBy.isAlive : false
+
+  const newActions = [...state.actions]
+
+  if (hasEmptyHand) {
+    newActions.push(addAction(state, 'round-win', playedBy!.id, `${playedBy!.name} a vidé sa main et remporte la manche !`))
   }
 
   return {
     ...state,
-    phase: 'player-transition',
+    phase: hasEmptyHand ? 'round-end' : 'player-transition',
     accusationResult: null,
+    actions: newActions,
+    roundWinnerId: hasEmptyHand ? playedBy!.id : null,
   }
 }
 
 export function believe(state: GameState): GameState {
   if (!state.lastPlay) return state
 
+  const playedBy = state.players.find((p) => p.id === state.lastPlay!.playerId)
+  const hasEmptyHand = playedBy ? playedBy.hand.length === 0 : false
+
   const newActions = [
     ...state.actions,
-    addAction(state, 'play', state.players[state.currentPlayerIndex].id, `${state.players[state.currentPlayerIndex].name} croit ${state.players.find(p => p.id === state.lastPlay!.playerId)?.name}`),
+    addAction(state, 'play', state.players[state.currentPlayerIndex].id, `${state.players[state.currentPlayerIndex].name} croit ${playedBy?.name}`),
   ]
+
+  if (hasEmptyHand) {
+    newActions.push(addAction(state, 'round-win', playedBy!.id, `${playedBy!.name} a vidé sa main et remporte la manche !`))
+  }
 
   return {
     ...state,
     lastPlay: null,
-    phase: 'player-transition',
+    phase: hasEmptyHand ? 'round-end' : 'player-transition',
     accusationResult: null,
     actions: newActions,
+    roundWinnerId: hasEmptyHand ? playedBy!.id : null,
   }
 }
 

@@ -46,6 +46,7 @@ export interface GameState {
   round: number
   accusationResult: {
     accuserId: string
+    playedById: string
     wasLie: boolean
     loserId: string
     revealedCards: Card[]
