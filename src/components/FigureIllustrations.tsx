@@ -17,7 +17,7 @@ const FIGURE_MAP: Record<FigureId, string> = {
 function ImageOrFallback({ figure, size, className }: Props) {
   const [useFallback, setUseFallback] = useState(false)
 
-  const src = `/images/figures/${FIGURE_MAP[figure]}.png`
+  const src = `${import.meta.env.BASE_URL}images/figures/${FIGURE_MAP[figure]}.png`
 
   if (useFallback) {
     return <SVGFallback figure={figure} size={size} className={className} />

@@ -9,11 +9,13 @@ interface Props {
   revealed?: boolean
 }
 
+const BASE = import.meta.env.BASE_URL
+
 const FIGURE_IMG: Record<string, string> = {
-  'baba-yaga': '/images/figures/baba-yaga.png',
-  'chort': '/images/figures/chort.png',
-  'lesnik': '/images/figures/lesnik.png',
-  'zmaj': '/images/figures/zmaj.png',
+  'baba-yaga': `${BASE}images/figures/baba-yaga.png`,
+  'chort': `${BASE}images/figures/chort.png`,
+  'lesnik': `${BASE}images/figures/lesnik.png`,
+  'zmaj': `${BASE}images/figures/zmaj.png`,
 }
 
 export function Card({ card, faceDown = false, selected = false, onClick, small = false, revealed = false }: Props) {

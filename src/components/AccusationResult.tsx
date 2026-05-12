@@ -50,7 +50,7 @@ export function AccusationResult() {
                 `}
               >
                 <img
-                  src={`/images/figures/${card.figure}.png`}
+                  src={`${import.meta.env.BASE_URL}images/figures/${card.figure}.png`}
                   alt={card.figure}
                   className="w-full h-full object-cover"
                 />
