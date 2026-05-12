@@ -51,6 +51,19 @@ export function getFigureInfo(id: FigureId): FigureInfo {
   return info
 }
 
+export const PLAYER_COLORS = [
+  { dot: '#d4a574', tag: 'golden', hex: 'rgba(212,165,116,' },
+  { dot: '#cc5555', tag: 'red',    hex: 'rgba(204,85,85,' },
+  { dot: '#55cc88', tag: 'green',  hex: 'rgba(85,204,136,' },
+  { dot: '#5588cc', tag: 'blue',   hex: 'rgba(85,136,204,' },
+  { dot: '#aa66cc', tag: 'purple', hex: 'rgba(170,102,204,' },
+  { dot: '#dd8844', tag: 'orange', hex: 'rgba(221,136,68,' },
+]
+
+export function getPlayerColor(index: number) {
+  return PLAYER_COLORS[index % PLAYER_COLORS.length]
+}
+
 export const COLORS = {
   bg: '#0a0a0a',
   wood: '#1a0f0a',

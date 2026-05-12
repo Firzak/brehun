@@ -1,10 +1,14 @@
+import { useEffect } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { getFigureInfo } from '../game/constants'
 import { useTranslation } from '../hooks/useTranslation'
+import { audio } from '../game/audio'
 
 export function VictoryScreen() {
   const { gameState, resetGame } = useGameStore()
   const { t } = useTranslation()
+
+  useEffect(() => { audio.victory() }, [])
 
   if (!gameState?.gameWinnerId) return null
 

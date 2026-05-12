@@ -8,13 +8,17 @@ import { AccusationModal } from '../components/AccusationModal'
 import { AccusationResult } from '../components/AccusationResult'
 import { RoundEnd } from '../components/RoundEnd'
 import { VictoryScreen } from '../components/VictoryScreen'
+import { RoundAnnouncement } from '../components/RoundAnnouncement'
 import { getFigureInfo } from '../game/constants'
 import { useTranslation } from '../hooks/useTranslation'
+import { audio } from '../game/audio'
 
 export function GameScreen() {
   const { gameState, playCards } = useGameStore()
   const { t } = useTranslation()
   const [selectedCards, setSelectedCards] = useState<string[]>([])
+  const [showRoundStart, setShowRoundStart] = useState(false)
+  const [lastRoundSeen, setLastRoundSeen] = useState(0)
 
   const currentPlayer = gameState?.players[gameState.currentPlayerIndex]
   const isPlaying = gameState?.phase === 'playing'
@@ -26,6 +30,15 @@ export function GameScreen() {
     setSelectedCards([])
   }, [gameState?.currentPlayerIndex, gameState?.phase])
 
+  useEffect(() => {
+    if (gameState && gameState.round > lastRoundSeen) {
+      setLastRoundSeen(gameState.round)
+      setShowRoundStart(true)
+      const timer = setTimeout(() => setShowRoundStart(false), 2200)
+      return () => clearTimeout(timer)
+    }
+  }, [gameState?.round])
+
   const handleToggleCard = (cardId: string) => {
     if (!isPlaying || !isCurrentPlayerAlive) return
     setSelectedCards((prev) =>
@@ -35,12 +48,13 @@ export function GameScreen() {
 
   const handlePlayCards = () => {
     if (!isPlaying || !isCurrentPlayerAlive || selectedCards.length === 0) return
+    audio.playCard()
     playCards(selectedCards)
   }
 
   if (!gameState) return null
 
-  const showTransition = gameState.phase === 'player-transition'
+  const showTransition = gameState.phase === 'player-transition' && !showRoundStart
   const showAccusation = gameState.phase === 'accusation'
   const showAccusationResult = gameState.phase === 'accusation-result'
   const showRoundEnd = gameState.phase === 'round-end'
@@ -48,7 +62,14 @@ export function GameScreen() {
 
   return (
     <div className="min-h-screen h-dvh bg-ink flex flex-col">
-      {showTransition && <PlayerTransition />}
+      {showRoundStart && (
+        <RoundAnnouncement
+          figure={gameState.targetFigure}
+          round={gameState.round}
+          onDone={() => setShowRoundStart(false)}
+        />
+      )}
+      {showTransition && !showRoundStart && <PlayerTransition />}
       {showAccusation && <AccusationModal />}
       {showAccusationResult && <AccusationResult />}
       {showRoundEnd && <RoundEnd />}

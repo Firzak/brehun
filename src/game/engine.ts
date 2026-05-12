@@ -329,6 +329,11 @@ export function startNewRound(state: GameState): GameState {
 
   const targetFigure = pickRandomFigure()
 
+  const winnerIdx = state.roundWinnerId
+    ? updatedPlayers.findIndex((p) => p.id === state.roundWinnerId && p.isAlive)
+    : -1
+  const startIdx = winnerIdx >= 0 ? winnerIdx : -1
+
   return {
     ...state,
     players: updatedPlayers,
@@ -342,7 +347,7 @@ export function startNewRound(state: GameState): GameState {
     round: state.round + 1,
     accusationResult: null,
     roundWinnerId: null,
-    currentPlayerIndex: getNextAliveIndex(updatedPlayers, -1),
+    currentPlayerIndex: getNextAliveIndex(updatedPlayers, startIdx),
   }
 }
 
