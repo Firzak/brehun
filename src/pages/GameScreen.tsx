@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { Hud } from '../components/Hud'
 import { Card } from '../components/Card'
@@ -13,7 +13,6 @@ import { getFigureInfo } from '../game/constants'
 export function GameScreen() {
   const { gameState, playCards } = useGameStore()
   const [selectedCards, setSelectedCards] = useState<string[]>([])
-  const handRef = useRef<HTMLDivElement>(null)
 
   const currentPlayer = gameState?.players[gameState.currentPlayerIndex]
   const isPlaying = gameState?.phase === 'playing'
@@ -68,19 +67,14 @@ export function GameScreen() {
                 </p>
               </div>
 
-              <div
-                ref={handRef}
-                className="flex gap-2 sm:gap-3 overflow-x-auto py-2 px-4 w-full snap-x snap-mandatory scrollbar-none"
-                style={{ scrollSnapType: 'x mandatory' }}
-              >
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 py-2 px-1 max-w-md mx-auto">
                 {currentPlayer!.hand.map((card) => (
-                  <div key={card.id} className="snap-start shrink-0">
-                    <Card
-                      card={card}
-                      selected={selectedCards.includes(card.id)}
-                      onClick={() => handleToggleCard(card.id)}
-                    />
-                  </div>
+                  <Card
+                    key={card.id}
+                    card={card}
+                    selected={selectedCards.includes(card.id)}
+                    onClick={() => handleToggleCard(card.id)}
+                  />
                 ))}
               </div>
             </div>

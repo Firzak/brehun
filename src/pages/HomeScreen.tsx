@@ -141,6 +141,18 @@ export function HomeScreen() {
             Commencer
           </button>
         </div>
+
+        <div className="bg-wood/40 border border-gold-dark/15 rounded-xl p-4 space-y-2">
+          <p className="text-gold/50 text-[10px] uppercase tracking-wider font-bold">Règles</p>
+          <ul className="text-gold/50 text-[11px] sm:text-xs space-y-1.5">
+            <li>• Chaque joueur reçoit <span className="text-gold/70">5 cartes</span> et a <span className="text-gold/70">3 vies</span>.</li>
+            <li>• Une <span className="text-gold/70">figure cible</span> est désignée chaque manche.</li>
+            <li>• À ton tour, pose 1-5 cartes <span className="text-gold/70">face cachée</span> en annonçant qu'elles sont toutes de la figure cible.</li>
+            <li>• Le suivant peut <span className="text-gold/70">Croire</span> ou crier <span className="text-blood/80">Menteur !</span></li>
+            <li>• Si tu mens et te fais prendre → <span className="text-ember">-1 vie</span>. Si tu dis vrai → l'accusateur perd 1 vie.</li>
+            <li>• <span className="text-gold/70">0 vie</span> = éliminé. Le <span className="text-gold/70">dernier en vie</span> gagne.</li>
+          </ul>
+        </div>
       </div>
     </div>
   )

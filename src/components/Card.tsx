@@ -21,7 +21,7 @@ const FIGURE_IMG: Record<string, string> = {
 export function Card({ card, faceDown = false, selected = false, onClick, small = false, revealed = false }: Props) {
   const sizeClass = small
     ? 'w-[62px] h-[87px] min-w-[62px]'
-    : 'w-[82px] h-[115px] min-w-[82px] sm:w-[90px] sm:h-[126px] sm:min-w-[90px]'
+    : 'w-[95px] h-[133px] min-w-[95px] sm:w-[105px] sm:h-[147px] sm:min-w-[105px]'
 
   if (faceDown && !revealed) {
     return (
@@ -76,7 +76,7 @@ export function Card({ card, faceDown = false, selected = false, onClick, small 
 export function CardBack({ small = false }: { small?: boolean }) {
   const sizeClass = small
     ? 'w-[62px] h-[87px] min-w-[62px]'
-    : 'w-[82px] h-[115px] min-w-[82px] sm:w-[90px] sm:h-[126px] sm:min-w-[90px]'
+    : 'w-[95px] h-[133px] min-w-[95px] sm:w-[105px] sm:h-[147px] sm:min-w-[105px]'
 
   return (
     <div
